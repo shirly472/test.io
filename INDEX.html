@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+	<title></title>
+</head>
+<body>
+   <div >SELECT COMPANY:</div>
+<div onclick="submitform()">
+ZQK
+<input type="hidden" value="ZQK" id="ZQK">
+</div>
+<div onclick="submitform1()">
+   ZUMZ
+   <input type="hidden" value="ZUMZ" id="ZUMZ">
+</div>
+<div onclick="submitform2()">
+ZTS
+<input type="hidden" value="ZTS" id="ZTS">
+</div>
+
+   <canvas id="chart" width="800" height="400"></canvas>
+   <script type="text/javascript">
+         
+            var test="";
+   function submitform(){
+      // alert("you clicked");
+      // document.getElementById("company").submit();
+       test = document.getElementById('ZQK').value;
+      console.log(test);
+
+   }
+   function submitform1(){
+      // alert("you clicked");
+      // document.getElementById("company").submit();
+      test = document.getElementById('ZUMZ').value;
+      console.log(test);
+
+   }
+   function submitform2(){
+      // alert("you clicked");
+      // document.getElementById("company").submit();
+       test = document.getElementById('ZTS').value;
+      console.log(test);
+
+   }
+
+         const xlabels = [];
+         const ylabels = [];
+         const cmpny=[];
+
+       
+   
+            
+       
+
+
+         chartIt();
+         
+
+         
+      async function chartIt() {
+         await getData();
+         const ctx = document.getElementById('chart');
+        
+        
+        const myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: xlabels,
+            datasets: [
+              {
+                label: 'End Of Day Stock Prices',
+                data: ylabels,
+                fill: false,
+                borderColor: 'rgba(106, 90, 205, 1)',
+                backgroundColor: 'rgba(106, 90, 205, 0.5)',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {}
+        });
+      }
+
+
+   	
+   	async function getData(){
+   	const response = await fetch('https://data.nasdaq.com/api/v3/datatables/WIKI/PRICES.csv?api_key=ko6vG1ss9ntywU16yZJ3');
+   	const data = await response.text();
+   	
+   	const table = data.split('\n').slice(1);
+   	table.forEach(row =>{
+   		const columns = row.split(',');
+   		const company=columns[0];
+   		const date=columns[1];
+   		const close=columns[5];
+         xlabels.push(date);
+         ylabels.push(close);
+         cmpny.push(company);
+
+
+
+
+
+   	console.log(company,date,close);
+   });
+
+   }
+   </script>
+</body>
+</html>
